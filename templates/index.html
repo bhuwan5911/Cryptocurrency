@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Price Predictor AI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a'
+                        },
+                        crypto: {
+                            bitcoin: '#f7931a',
+                            ethereum: '#627eea'
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in',
+                        'slide-up': 'slideUp 0.3s ease-out',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 min-h-screen text-white transition-all duration-300">
+    
+    <!-- Navigation -->
+    <nav class="backdrop-blur-lg bg-white/10 border-b border-white/10 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                        <i data-feather="trending-up" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                            Crypto Predictor AI
+                        </h1>
+                        <p class="text-xs text-gray-300">Machine Learning Powered</p>
+                    </div>
+                </div>
+                <button id="darkModeToggle" class="p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors">
+                    <i data-feather="moon" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Header Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="glass-card p-6 text-center">
+                <div class="w-12 h-12 bg-crypto-bitcoin/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i data-feather="dollar-sign" class="w-6 h-6 text-crypto-bitcoin"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-300">AI Predictions</h3>
+                <p class="text-2xl font-bold text-white" id="totalPredictions">0</p>
+            </div>
+            
+            <div class="glass-card p-6 text-center">
+                <div class="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i data-feather="activity" class="w-6 h-6 text-green-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-300">Accuracy Rate</h3>
+                <p class="text-2xl font-bold text-white">85.3%</p>
+            </div>
+            
+            <div class="glass-card p-6 text-center">
+                <div class="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i data-feather="cpu" class="w-6 h-6 text-purple-400"></i>
+                </div>
+                <h3 class="text-lg font-semibold text-gray-300">Model Type</h3>
+                <p class="text-2xl font-bold text-white">Linear Regression</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Prediction Form -->
+            <div class="lg:col-span-1">
+                <div class="glass-card p-6">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center">
+                            <i data-feather="zap" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <h2 class="text-xl font-bold text-white">Generate Prediction</h2>
+                    </div>
+                    
+                    <form id="predictionForm" class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">
+                                Select Cryptocurrency
+                            </label>
+                            <div class="relative">
+                                <select id="cryptoSelect" class="glass-input w-full appearance-none">
+                                    <option value="">Choose cryptocurrency...</option>
+                                    <option value="BTC">Bitcoin (BTC)</option>
+                                    <option value="ETH">Ethereum (ETH)</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                                    <i data-feather="chevron-down" class="w-4 h-4 text-gray-400"></i>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" id="predictBtn" class="btn-primary w-full flex items-center justify-center space-x-2">
+                            <i data-feather="trending-up" class="w-4 h-4"></i>
+                            <span>Generate Prediction</span>
+                        </button>
+                    </form>
+                    
+                    <!-- Prediction Result -->
+                    <div id="predictionResult" class="hidden mt-6 p-4 bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-lg border border-green-500/20">
+                        <div class="text-center">
+                            <h3 class="text-lg font-semibold text-white mb-2">Prediction Result</h3>
+                            <div class="space-y-2">
+                                <div class="flex justify-between">
+                                    <span class="text-gray-300">Current Price:</span>
+                                    <span id="currentPrice" class="text-white font-semibold">-</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-300">Predicted Price:</span>
+                                    <span id="predictedPrice" class="text-white font-bold text-lg">-</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-300">Expected Change:</span>
+                                    <span id="changePercent" class="font-semibold">-</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span class="text-gray-300">Prediction Date:</span>
+                                    <span id="predictionDate" class="text-white">-</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Error Message -->
+                    <div id="errorMessage" class="hidden mt-4 p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
+                        <div class="flex items-center space-x-2">
+                            <i data-feather="alert-circle" class="w-5 h-5 text-red-400"></i>
+                            <span class="text-red-300" id="errorText">An error occurred</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts and Data -->
+            <div class="lg:col-span-2 space-y-6">
+                
+                <!-- Price Chart -->
+                <div class="glass-card p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
+                                <i data-feather="bar-chart-2" class="w-5 h-5 text-white"></i>
+                            </div>
+                            <h2 class="text-xl font-bold text-white">Price Chart</h2>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="chart-period-btn active" data-period="7">7D</button>
+                            <button class="chart-period-btn" data-period="30">30D</button>
+                        </div>
+                    </div>
+                    
+                    <div class="h-80">
+                        <canvas id="priceChart"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Predictions History -->
+                <div class="glass-card p-6">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center">
+                            <i data-feather="clock" class="w-5 h-5 text-white"></i>
+                        </div>
+                        <h2 class="text-xl font-bold text-white">Recent Predictions</h2>
+                    </div>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead>
+                                <tr class="border-b border-white/10">
+                                    <th class="text-left py-3 px-2 text-gray-300 font-medium">Crypto</th>
+                                    <th class="text-left py-3 px-2 text-gray-300 font-medium">Date</th>
+                                    <th class="text-right py-3 px-2 text-gray-300 font-medium">Predicted</th>
+                                    <th class="text-right py-3 px-2 text-gray-300 font-medium">Actual</th>
+                                    <th class="text-right py-3 px-2 text-gray-300 font-medium">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historyTableBody">
+                                <tr>
+                                    <td colspan="5" class="text-center py-8 text-gray-400">
+                                        <div class="flex flex-col items-center space-y-2">
+                                            <i data-feather="database" class="w-8 h-8 text-gray-500"></i>
+                                            <span>No predictions yet. Make your first prediction!</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+        <div class="glass-card p-8 text-center">
+            <div class="animate-spin w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"></div>
+            <h3 class="text-lg font-semibold text-white mb-2">Generating Prediction</h3>
+            <p class="text-gray-300">AI model is analyzing market data...</p>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    <script>
+        // Initialize Feather Icons
+        feather.replace();
+    </script>
+</body>
+</html>

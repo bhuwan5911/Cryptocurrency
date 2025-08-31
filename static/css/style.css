@@ -1,0 +1,196 @@
+/* Custom CSS for Crypto Predictor AI */
+
+/* Glass morphism effects */
+.glass-card {
+    @apply backdrop-blur-lg bg-white/10 border border-white/20 rounded-xl;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.glass-input {
+    @apply backdrop-blur-lg bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200;
+    box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.2);
+}
+
+.glass-input:focus {
+    @apply bg-white/20;
+    box-shadow: 0 4px 16px 0 rgba(59, 130, 246, 0.3);
+}
+
+/* Buttons */
+.btn-primary {
+    @apply bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 active:scale-95;
+    box-shadow: 0 4px 15px 0 rgba(59, 130, 246, 0.4);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 8px 25px 0 rgba(59, 130, 246, 0.6);
+}
+
+.btn-primary:disabled {
+    @apply opacity-50 cursor-not-allowed transform-none;
+}
+
+.chart-period-btn {
+    @apply px-3 py-1 text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200 rounded-md hover:bg-white/10;
+}
+
+.chart-period-btn.active {
+    @apply text-white bg-blue-500/30;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+}
+
+/* Table styles */
+table tbody tr {
+    @apply border-b border-white/5 hover:bg-white/5 transition-colors duration-150;
+}
+
+table tbody td {
+    @apply py-3 px-2 text-sm;
+}
+
+/* Status badges */
+.status-pending {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-500/20 text-yellow-300;
+}
+
+.status-completed {
+    @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-500/20 text-green-300;
+}
+
+/* Crypto colors */
+.text-crypto-btc { color: #f7931a; }
+.text-crypto-eth { color: #627eea; }
+
+/* Loading states */
+.loading {
+    @apply opacity-50 pointer-events-none;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-gray-800/50;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-gray-600/50;
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-500/70;
+}
+
+/* Dark mode transitions */
+* {
+    @apply transition-colors duration-300;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 640px) {
+    .glass-card {
+        @apply mx-4;
+    }
+    
+    .btn-primary {
+        @apply py-2 px-4 text-sm;
+    }
+    
+    table {
+        @apply text-xs;
+    }
+    
+    .chart-period-btn {
+        @apply px-2 py-1 text-xs;
+    }
+}
+
+/* Chart container */
+#priceChart {
+    background: transparent !important;
+}
+
+/* Success/Error message animations */
+.message-enter {
+    animation: slideUp 0.3s ease-out;
+}
+
+/* Hover effects for crypto symbols */
+.crypto-symbol {
+    @apply transition-all duration-200 transform hover:scale-105;
+}
+
+/* Loading spinner improvements */
+.spinner {
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Glass effect improvements for different backgrounds */
+.glass-card-light {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.glass-card-dark {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Price change indicators */
+.price-up {
+    @apply text-green-400;
+}
+
+.price-down {
+    @apply text-red-400;
+}
+
+.price-neutral {
+    @apply text-gray-400;
+}
+
+/* Enhanced focus states */
+.glass-input:focus,
+.chart-period-btn:focus,
+.btn-primary:focus {
+    @apply outline-none ring-2 ring-blue-500 ring-opacity-50;
+}
+
+/* Improved accessibility */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
