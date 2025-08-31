@@ -136,7 +136,7 @@ class CryptoPredictionModel:
             # Get current price for comparison
             current_price = data['Close'].iloc[-1]
             
-            logging.info(f"{symbol} - Current: ${current_price:.2f}, Predicted: ${prediction:.2f}")
+            logging.info(f"{symbol} - Current: ${float(current_price):.2f}, Predicted: ${float(prediction):.2f}")
             
             return {
                 'symbol': symbol,
@@ -162,7 +162,7 @@ class CryptoPredictionModel:
             for date, row in data.iterrows():
                 chart_data.append({
                     'date': date.date().strftime('%Y-%m-%d') if hasattr(date, 'date') else str(date)[:10],
-                    'price': float(row['Close'].iloc[0]) if hasattr(row['Close'], 'iloc') else float(row['Close'])
+                    'price': float(row['Close'])
                 })
             
             return chart_data
