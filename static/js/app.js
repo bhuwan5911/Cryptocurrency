@@ -3,8 +3,8 @@ class CryptoPredictorApp {
         this.chart = null;
         this.currentCrypto = 'BTC';
         this.predictionDays = 1;
-        this.isDarkMode = true;
-        this.portfolio = JSON.parse(localStorage.getItem('cryptoPortfolio') || '[]');
+        this.isDarkMode = localStorage.getItem('darkMode') !== 'false';
+        this.portfolio = [];
         this.init();
     }
 
@@ -13,16 +13,18 @@ class CryptoPredictorApp {
         this.loadHistory();
         this.loadChart();
         this.updateStats();
+        this.loadPortfolio();
+        this.applyDarkMode();
     }
 
     setupEventListeners() {
         // Prediction form
         const form = document.getElementById('predictionForm');
-        form.addEventListener('submit', (e) => this.handlePredict(e));
+        form?.addEventListener('submit', (e) => this.handlePredict(e));
 
         // Dark mode toggle
         const darkModeToggle = document.getElementById('darkModeToggle');
-        darkModeToggle.addEventListener('click', () => this.toggleDarkMode());
+        darkModeToggle?.addEventListener('click', () => this.toggleDarkMode());
 
         // Chart period buttons
         document.querySelectorAll('.chart-period-btn').forEach(btn => {
@@ -36,12 +38,16 @@ class CryptoPredictorApp {
 
         // Crypto select change
         const cryptoSelect = document.getElementById('cryptoSelect');
-        cryptoSelect.addEventListener('change', (e) => {
+        cryptoSelect?.addEventListener('change', (e) => {
             this.currentCrypto = e.target.value;
             if (this.currentCrypto) {
                 this.loadChart();
             }
         });
+
+        // Portfolio form
+        const portfolioForm = document.getElementById('addHoldingForm');
+        portfolioForm?.addEventListener('submit', (e) => this.handleAddHolding(e));
     }
 
     async handlePredict(e) {
@@ -371,20 +377,28 @@ class CryptoPredictorApp {
 
     toggleDarkMode() {
         this.isDarkMode = !this.isDarkMode;
+        localStorage.setItem('darkMode', this.isDarkMode);
+        this.applyDarkMode();
+    }
+
+    applyDarkMode() {
         const html = document.documentElement;
         const icon = document.querySelector('#darkModeToggle i');
+        const body = document.body;
         
-        if (icon) {
-            if (this.isDarkMode) {
-                html.classList.add('dark');
-                icon.setAttribute('data-feather', 'moon');
-            } else {
-                html.classList.remove('dark');
-                icon.setAttribute('data-feather', 'sun');
-            }
-            
-            feather.replace();
+        if (this.isDarkMode) {
+            html.classList.add('dark');
+            body.classList.remove('light-theme');
+            body.classList.add('dark-theme');
+            icon?.setAttribute('data-feather', 'moon');
+        } else {
+            html.classList.remove('dark');
+            body.classList.remove('dark-theme');
+            body.classList.add('light-theme');
+            icon?.setAttribute('data-feather', 'sun');
         }
+        
+        feather.replace();
     }
 
     async updateStats() {
@@ -400,11 +414,188 @@ class CryptoPredictorApp {
             console.error('Error updating stats:', error);
         }
     }
+
+    // Portfolio Management Methods
+    async loadPortfolio() {
+        try {
+            const response = await fetch('/api/portfolio');
+            const data = await response.json();
+
+            if (response.ok) {
+                this.portfolio = data.holdings || [];
+                this.updatePortfolioDisplay(data);
+            }
+        } catch (error) {
+            console.error('Error loading portfolio:', error);
+        }
+    }
+
+    async handleAddHolding(e) {
+        e.preventDefault();
+        
+        const crypto = document.getElementById('portfolioCrypto')?.value;
+        const amount = parseFloat(document.getElementById('holdingAmount')?.value || '0');
+        const purchasePrice = parseFloat(document.getElementById('purchasePrice')?.value || '0');
+
+        if (!crypto || amount <= 0 || purchasePrice <= 0) {
+            this.showError('Please fill all portfolio fields with valid values');
+            return;
+        }
+
+        try {
+            const response = await fetch('/api/portfolio', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    crypto, 
+                    amount, 
+                    purchase_price: purchasePrice 
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                this.loadPortfolio(); // Refresh portfolio
+                this.clearPortfolioForm();
+                this.showPortfolioSuccess(`Added ${amount} ${crypto} to portfolio`);
+            } else {
+                this.showError(data.error || 'Failed to add holding');
+            }
+        } catch (error) {
+            console.error('Error adding holding:', error);
+            this.showError('Failed to add holding to portfolio');
+        }
+    }
+
+    async deleteHolding(holdingId) {
+        if (!confirm('Are you sure you want to remove this holding?')) {
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/portfolio/${holdingId}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                this.loadPortfolio(); // Refresh portfolio
+            }
+        } catch (error) {
+            console.error('Error deleting holding:', error);
+        }
+    }
+
+    updatePortfolioDisplay(data) {
+        // Update summary
+        const totalValueEl = document.getElementById('totalValue');
+        const totalPnLEl = document.getElementById('totalPnL');
+        const totalPnLPercentEl = document.getElementById('totalPnLPercent');
+
+        if (totalValueEl) totalValueEl.textContent = `$${data.total_value?.toLocaleString() || '0.00'}`;
+        
+        if (totalPnLEl) {
+            const pnlClass = data.total_pnl >= 0 ? 'text-green-400' : 'text-red-400';
+            totalPnLEl.className = `text-sm font-bold ${pnlClass}`;
+            totalPnLEl.textContent = `$${data.total_pnl?.toLocaleString() || '0.00'}`;
+        }
+        
+        if (totalPnLPercentEl) {
+            const pnlClass = data.total_pnl_percent >= 0 ? 'text-green-400' : 'text-red-400';
+            totalPnLPercentEl.className = `text-xl font-bold ${pnlClass}`;
+            const sign = data.total_pnl_percent >= 0 ? '+' : '';
+            totalPnLPercentEl.textContent = `${sign}${data.total_pnl_percent?.toFixed(2) || '0.00'}%`;
+        }
+
+        // Update holdings list
+        this.renderHoldings(data.holdings || []);
+    }
+
+    renderHoldings(holdings) {
+        const container = document.getElementById('holdingsContainer');
+        if (!container) return;
+
+        if (holdings.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-4 text-gray-400">
+                    <i data-feather="briefcase" class="w-6 h-6 mx-auto mb-1"></i>
+                    <p class="text-xs">No holdings yet</p>
+                </div>
+            `;
+            feather.replace();
+            return;
+        }
+
+        container.innerHTML = holdings.map(holding => {
+            const pnlClass = holding.pnl >= 0 ? 'text-green-400' : 'text-red-400';
+            const pnlSign = holding.pnl >= 0 ? '+' : '';
+            
+            return `
+                <div class="bg-white/5 rounded-lg p-3 text-sm">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="font-bold text-white">${holding.crypto}</span>
+                        <button onclick="app.deleteHolding(${holding.id})" 
+                                class="text-red-400 hover:text-red-300 transition-colors">
+                            <i data-feather="trash-2" class="w-3 h-3"></i>
+                        </button>
+                    </div>
+                    <div class="space-y-1">
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Amount:</span>
+                            <span class="text-white">${holding.amount}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">Value:</span>
+                            <span class="text-white">$${holding.current_value?.toLocaleString()}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-400">P&L:</span>
+                            <span class="${pnlClass}">${pnlSign}$${Math.abs(holding.pnl || 0).toLocaleString()}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        
+        feather.replace();
+    }
+
+    clearPortfolioForm() {
+        const cryptoSelect = document.getElementById('portfolioCrypto');
+        const amountInput = document.getElementById('holdingAmount');
+        const priceInput = document.getElementById('purchasePrice');
+
+        if (cryptoSelect) cryptoSelect.value = '';
+        if (amountInput) amountInput.value = '';
+        if (priceInput) priceInput.value = '';
+    }
+
+    showPortfolioSuccess(message) {
+        // Create a temporary success message
+        const successDiv = document.createElement('div');
+        successDiv.className = 'fixed top-4 right-4 bg-green-500/20 border border-green-400/30 rounded-lg p-4 text-green-300 animate-fade-in z-50';
+        successDiv.innerHTML = `
+            <div class="flex items-center space-x-2">
+                <i data-feather="check-circle" class="w-5 h-5"></i>
+                <span>${message}</span>
+            </div>
+        `;
+        
+        document.body.appendChild(successDiv);
+        feather.replace();
+        
+        setTimeout(() => {
+            successDiv.remove();
+        }, 3000);
+    }
 }
 
 // Initialize app when DOM is loaded
+let app;
 document.addEventListener('DOMContentLoaded', () => {
-    new CryptoPredictorApp();
+    app = new CryptoPredictorApp();
 });
 
 // Utility functions

@@ -1,5 +1,39 @@
 /* Modern Crypto Predictor AI Theme */
 
+/* Light theme styles */
+.light-theme {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+    color: #333 !important;
+}
+
+.light-theme .glass-card {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    color: #333 !important;
+}
+
+.light-theme .glass-input {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 2px solid rgba(0, 0, 0, 0.2) !important;
+    color: #333 !important;
+}
+
+.light-theme .glass-input::placeholder {
+    color: #666 !important;
+}
+
+.light-theme nav {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.light-theme .gradient-text {
+    background: linear-gradient(45deg, #667eea, #764ba2) !important;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    color: transparent !important;
+}
+
 /* Glass morphism effects with improved visibility */
 .glass-card {
     @apply backdrop-blur-xl bg-gradient-to-br from-white/20 to-white/5 border border-white/30 rounded-2xl shadow-2xl;

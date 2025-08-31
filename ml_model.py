@@ -136,13 +136,13 @@ class CryptoPredictionModel:
             # Get current price for comparison
             current_price = data['Close'].iloc[-1]
             
-            logging.info(f"{symbol} - Current: ${float(current_price):.2f}, Predicted: ${float(prediction):.2f}")
+            logging.info(f"{symbol} - Current: ${float(current_price.iloc[0] if hasattr(current_price, 'iloc') else current_price):.2f}, Predicted: ${float(prediction):.2f}")
             
             return {
                 'symbol': symbol,
-                'current_price': float(current_price),
+                'current_price': float(current_price.iloc[0] if hasattr(current_price, 'iloc') else current_price),
                 'predicted_price': float(prediction),
-                'change_percent': float((prediction - current_price) / current_price * 100),
+                'change_percent': float((prediction - (current_price.iloc[0] if hasattr(current_price, 'iloc') else current_price)) / (current_price.iloc[0] if hasattr(current_price, 'iloc') else current_price) * 100),
                 'prediction_date': (datetime.now() + timedelta(days=days_ahead)).strftime('%Y-%m-%d')
             }
         
@@ -162,7 +162,7 @@ class CryptoPredictionModel:
             for date, row in data.iterrows():
                 chart_data.append({
                     'date': date.date().strftime('%Y-%m-%d') if hasattr(date, 'date') else str(date)[:10],
-                    'price': float(row['Close'])
+                    'price': float(row['Close'].iloc[0] if hasattr(row['Close'], 'iloc') else row['Close'])
                 })
             
             return chart_data
