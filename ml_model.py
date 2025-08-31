@@ -20,7 +20,7 @@ class CryptoPredictionModel:
         try:
             ticker = f"{symbol}-USD"
             data = yf.download(ticker, period=period, interval="1d")
-            if data.empty:
+            if data is None or data.empty:
                 logging.error(f"No data found for {ticker}")
                 return None
             return data
@@ -38,8 +38,8 @@ class CryptoPredictionModel:
         
         X, y = [], []
         for i in range(lookback_days, len(prices)):
-            # Use past lookback_days prices as features
-            X.append(prices[i-lookback_days:i])
+            # Use past lookback_days prices as features - flatten to 1D
+            X.append(prices[i-lookback_days:i].flatten())
             y.append(prices[i])
         
         return np.array(X), np.array(y)
@@ -161,7 +161,7 @@ class CryptoPredictionModel:
             chart_data = []
             for date, row in data.iterrows():
                 chart_data.append({
-                    'date': date.strftime('%Y-%m-%d'),
+                    'date': date.date().strftime('%Y-%m-%d') if hasattr(date, 'date') else str(date)[:10],
                     'price': float(row['Close'])
                 })
             

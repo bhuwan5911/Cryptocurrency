@@ -21,6 +21,6 @@ class Prediction(db.Model):
             'crypto': self.crypto,
             'date': self.date.strftime('%Y-%m-%d %H:%M:%S'),
             'predicted_price': round(self.predicted_price, 2),
-            'actual_price': round(self.actual_price, 2) if self.actual_price else None,
+            'actual_price': round(self.actual_price, 2) if self.actual_price is not None else None,
             'prediction_date': self.prediction_date
         }

@@ -17,6 +17,9 @@ db = SQLAlchemy(model_class=Base)
 app = Flask(__name__)
 app.secret_key = os.environ.get("SESSION_SECRET", "dev-secret-key-change-in-production")
 
+# Add ml_model attribute to app
+app.ml_model = None
+
 # Enable CORS for API access
 CORS(app)
 
