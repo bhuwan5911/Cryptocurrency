@@ -1,0 +1,108 @@
+Title:
+Crypto Price Predictor AI
+
+Description:
+Build a full-stack project called Crypto Price Predictor AI.
+The project should have:
+
+Professional Frontend (simple but modern)
+
+Strong Backend API
+
+Machine Learning Model for predictions
+
+Database Integration for storing past predictions
+
+🎨 Frontend (Professional but Simple)
+
+Use React.js + TailwindCSS (or Next.js if available).
+
+Show:
+
+A clean dashboard page with glassmorphism or card-based design.
+
+A form: “Select Cryptocurrency” (dropdown: BTC, ETH) + “Predict” button.
+
+Show prediction result: Predicted Price + Chart (line graph).
+
+Use a chart library like Recharts or Chart.js for graphs.
+
+Dark mode support (bonus).
+
+⚙️ Backend (Strong but Simple)
+
+Use Python (FastAPI or Flask) for backend API.
+
+API Endpoints:
+
+/predict → returns predicted price (uses ML model).
+
+/history → returns past predictions (for chart).
+
+Connect frontend to backend via REST API.
+
+Use SQLite or MongoDB to store predictions.
+
+🤖 Machine Learning Model
+
+Use scikit-learn Linear Regression model for predictions.
+
+Train on Bitcoin (BTC-USD) historical price dataset (from Yahoo Finance or Kaggle).
+
+Features: Use past 5 days’ prices to predict the next day.
+
+Save model as model.pkl and load it inside backend.
+
+Return both:
+
+actual price (if available)
+
+predicted price
+
+🗄️ Database
+
+Store predictions in SQLite (simple) or MongoDB Atlas (cloud).
+
+Schema:
+
+{
+  "id": int,
+  "crypto": "BTC",
+  "date": "2025-08-31",
+  "predicted_price": 29200.50,
+  "actual_price": 29180.30
+}
+
+🚀 Features
+
+User selects a crypto → presses Predict → gets predicted price + chart.
+
+Show history of last 7 predictions in a table.
+
+Show graph comparing actual vs predicted prices.
+
+Clean and professional UI (dashboard style).
+
+📦 Tech Stack
+
+Frontend: React.js + TailwindCSS + Chart.js
+
+Backend: Python (FastAPI / Flask)
+
+ML: scikit-learn, pandas, numpy, matplotlib
+
+Database: SQLite / MongoDB
+
+Hosting (optional): Vercel (frontend), Render/Heroku (backend)
+
+🎯 Deliverables
+
+frontend/ → React code with Tailwind
+
+backend/ → Flask/FastAPI app with /predict and /history endpoints
+
+model/ → trained model (model.pkl)
+
+database/ → SQLite DB file (or MongoDB config)
+
+Documentation: README.md explaining how to run frontend & backend
