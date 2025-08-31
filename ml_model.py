@@ -89,7 +89,7 @@ class CryptoPredictionModel:
     
     def load_or_train_models(self):
         """Load existing models or train new ones"""
-        symbols = ['BTC', 'ETH']
+        symbols = ['BTC', 'ETH', 'ADA', 'SOL', 'MATIC', 'DOT', 'AVAX', 'LINK', 'UNI', 'LTC']
         
         for symbol in symbols:
             model_path = f"model_{symbol.lower()}.pkl"
@@ -129,9 +129,9 @@ class CryptoPredictionModel:
                 logging.error(f"Not enough recent data for {symbol}")
                 return None
             
-            # Make prediction
+            # Make prediction - reshape to match training data format
             model = self.models[symbol]
-            prediction = model.predict([recent_prices])[0]
+            prediction = model.predict([recent_prices.flatten()])[0]
             
             # Get current price for comparison
             current_price = data['Close'].iloc[-1]
@@ -162,7 +162,7 @@ class CryptoPredictionModel:
             for date, row in data.iterrows():
                 chart_data.append({
                     'date': date.date().strftime('%Y-%m-%d') if hasattr(date, 'date') else str(date)[:10],
-                    'price': float(row['Close'])
+                    'price': float(row['Close'].iloc[0]) if hasattr(row['Close'], 'iloc') else float(row['Close'])
                 })
             
             return chart_data

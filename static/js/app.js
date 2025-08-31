@@ -2,7 +2,9 @@ class CryptoPredictorApp {
     constructor() {
         this.chart = null;
         this.currentCrypto = 'BTC';
+        this.predictionDays = 1;
         this.isDarkMode = true;
+        this.portfolio = JSON.parse(localStorage.getItem('cryptoPortfolio') || '[]');
         this.init();
     }
 
@@ -25,6 +27,11 @@ class CryptoPredictorApp {
         // Chart period buttons
         document.querySelectorAll('.chart-period-btn').forEach(btn => {
             btn.addEventListener('click', (e) => this.handleChartPeriod(e));
+        });
+
+        // Prediction period buttons
+        document.querySelectorAll('.prediction-period-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => this.handlePredictionPeriod(e));
         });
 
         // Crypto select change
@@ -56,7 +63,7 @@ class CryptoPredictorApp {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ crypto })
+                body: JSON.stringify({ crypto, days: this.predictionDays })
             });
 
             const data = await response.json();
@@ -235,7 +242,15 @@ class CryptoPredictorApp {
         // Determine crypto colors
         const cryptoColors = {
             BTC: { border: '#f7931a', background: '#f7931a20' },
-            ETH: { border: '#627eea', background: '#627eea20' }
+            ETH: { border: '#627eea', background: '#627eea20' },
+            ADA: { border: '#0033ad', background: '#0033ad20' },
+            SOL: { border: '#9945ff', background: '#9945ff20' },
+            MATIC: { border: '#8247e5', background: '#8247e520' },
+            DOT: { border: '#e6007a', background: '#e6007a20' },
+            AVAX: { border: '#e84142', background: '#e8414220' },
+            LINK: { border: '#375bd2', background: '#375bd220' },
+            UNI: { border: '#ff007a', background: '#ff007a20' },
+            LTC: { border: '#bfbbbb', background: '#bfbbbb20' }
         };
 
         const colors = cryptoColors[crypto] || cryptoColors.BTC;
@@ -344,20 +359,32 @@ class CryptoPredictorApp {
         this.loadChart(period);
     }
 
+    handlePredictionPeriod(e) {
+        this.predictionDays = parseInt(e.target.dataset.days);
+        
+        // Update active button
+        document.querySelectorAll('.prediction-period-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        e.target.classList.add('active');
+    }
+
     toggleDarkMode() {
         this.isDarkMode = !this.isDarkMode;
         const html = document.documentElement;
         const icon = document.querySelector('#darkModeToggle i');
         
-        if (this.isDarkMode) {
-            html.classList.add('dark');
-            icon.setAttribute('data-feather', 'moon');
-        } else {
-            html.classList.remove('dark');
-            icon.setAttribute('data-feather', 'sun');
+        if (icon) {
+            if (this.isDarkMode) {
+                html.classList.add('dark');
+                icon.setAttribute('data-feather', 'moon');
+            } else {
+                html.classList.remove('dark');
+                icon.setAttribute('data-feather', 'sun');
+            }
+            
+            feather.replace();
         }
-        
-        feather.replace();
     }
 
     async updateStats() {

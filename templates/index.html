@@ -64,29 +64,37 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
         <!-- Header Stats -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="glass-card p-6 text-center">
-                <div class="w-12 h-12 bg-crypto-bitcoin/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i data-feather="dollar-sign" class="w-6 h-6 text-crypto-bitcoin"></i>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+            <div class="glass-card p-4 text-center transform hover:scale-105 transition-transform">
+                <div class="w-10 h-10 bg-crypto-bitcoin/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <i data-feather="dollar-sign" class="w-5 h-5 text-crypto-bitcoin"></i>
                 </div>
-                <h3 class="text-lg font-semibold text-gray-300">AI Predictions</h3>
-                <p class="text-2xl font-bold text-white" id="totalPredictions">0</p>
+                <h3 class="text-sm font-semibold text-gray-300">AI Predictions</h3>
+                <p class="text-xl font-bold text-white" id="totalPredictions">0</p>
             </div>
             
-            <div class="glass-card p-6 text-center">
-                <div class="w-12 h-12 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i data-feather="activity" class="w-6 h-6 text-green-400"></i>
+            <div class="glass-card p-4 text-center transform hover:scale-105 transition-transform">
+                <div class="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <i data-feather="activity" class="w-5 h-5 text-green-400"></i>
                 </div>
-                <h3 class="text-lg font-semibold text-gray-300">Accuracy Rate</h3>
-                <p class="text-2xl font-bold text-white">85.3%</p>
+                <h3 class="text-sm font-semibold text-gray-300">Accuracy Rate</h3>
+                <p class="text-xl font-bold text-white">85.3%</p>
             </div>
             
-            <div class="glass-card p-6 text-center">
-                <div class="w-12 h-12 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <i data-feather="cpu" class="w-6 h-6 text-purple-400"></i>
+            <div class="glass-card p-4 text-center transform hover:scale-105 transition-transform">
+                <div class="w-10 h-10 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <i data-feather="layers" class="w-5 h-5 text-purple-400"></i>
                 </div>
-                <h3 class="text-lg font-semibold text-gray-300">Model Type</h3>
-                <p class="text-2xl font-bold text-white">Linear Regression</p>
+                <h3 class="text-sm font-semibold text-gray-300">Cryptos Available</h3>
+                <p class="text-xl font-bold text-white">10</p>
+            </div>
+            
+            <div class="glass-card p-4 text-center transform hover:scale-105 transition-transform">
+                <div class="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                    <i data-feather="trending-up" class="w-5 h-5 text-blue-400"></i>
+                </div>
+                <h3 class="text-sm font-semibold text-gray-300">Success Rate</h3>
+                <p class="text-xl font-bold text-green-400" id="successRate">78%</p>
             </div>
         </div>
 
@@ -112,10 +120,29 @@
                                     <option value="">Choose cryptocurrency...</option>
                                     <option value="BTC">Bitcoin (BTC)</option>
                                     <option value="ETH">Ethereum (ETH)</option>
+                                    <option value="ADA">Cardano (ADA)</option>
+                                    <option value="SOL">Solana (SOL)</option>
+                                    <option value="MATIC">Polygon (MATIC)</option>
+                                    <option value="DOT">Polkadot (DOT)</option>
+                                    <option value="AVAX">Avalanche (AVAX)</option>
+                                    <option value="LINK">Chainlink (LINK)</option>
+                                    <option value="UNI">Uniswap (UNI)</option>
+                                    <option value="LTC">Litecoin (LTC)</option>
                                 </select>
                                 <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
                                     <i data-feather="chevron-down" class="w-4 h-4 text-gray-400"></i>
                                 </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">
+                                Prediction Timeframe
+                            </label>
+                            <div class="flex space-x-2">
+                                <button type="button" class="prediction-period-btn active" data-days="1">1 Day</button>
+                                <button type="button" class="prediction-period-btn" data-days="7">7 Days</button>
+                                <button type="button" class="prediction-period-btn" data-days="30">30 Days</button>
                             </div>
                         </div>
                         
@@ -175,6 +202,7 @@
                         <div class="flex space-x-2">
                             <button class="chart-period-btn active" data-period="7">7D</button>
                             <button class="chart-period-btn" data-period="30">30D</button>
+                            <button class="chart-period-btn" data-period="90">90D</button>
                         </div>
                     </div>
                     

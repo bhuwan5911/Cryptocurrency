@@ -16,8 +16,9 @@ def predict():
         data = request.get_json()
         crypto = data.get('crypto', '').upper()
         
-        if crypto not in ['BTC', 'ETH']:
-            return jsonify({'error': 'Invalid cryptocurrency. Please select BTC or ETH.'}), 400
+        valid_cryptos = ['BTC', 'ETH', 'ADA', 'SOL', 'MATIC', 'DOT', 'AVAX', 'LINK', 'UNI', 'LTC']
+        if crypto not in valid_cryptos:
+            return jsonify({'error': f'Invalid cryptocurrency. Please select from: {", ".join(valid_cryptos)}.'}), 400
         
         # Generate prediction using ML model
         prediction_result = app.ml_model.predict_price(crypto)
@@ -85,7 +86,8 @@ def chart_data():
         crypto = request.args.get('crypto', 'BTC').upper()
         days = request.args.get('days', 30, type=int)
         
-        if crypto not in ['BTC', 'ETH']:
+        valid_cryptos = ['BTC', 'ETH', 'ADA', 'SOL', 'MATIC', 'DOT', 'AVAX', 'LINK', 'UNI', 'LTC']
+        if crypto not in valid_cryptos:
             return jsonify({'error': 'Invalid cryptocurrency'}), 400
         
         # Get historical data

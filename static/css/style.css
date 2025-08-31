@@ -38,6 +38,14 @@
     @apply text-white bg-blue-500/30;
 }
 
+.prediction-period-btn {
+    @apply px-3 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200 rounded-md hover:bg-white/10 border border-gray-600;
+}
+
+.prediction-period-btn.active {
+    @apply text-white bg-gradient-to-r from-green-500 to-blue-500 border-transparent;
+}
+
 /* Animations */
 @keyframes fadeIn {
     from { opacity: 0; transform: translateY(10px); }
