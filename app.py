@@ -23,12 +23,40 @@ app.ml_model = None
 # Enable CORS for API access
 CORS(app)
 
-# Configure the database
-database_url = os.environ.get("DATABASE_URL")
-if database_url and database_url.startswith("postgres://"):
-    database_url = database_url.replace("postgres://", "postgresql://", 1)
+# Configure the database with robust PostgreSQL fallback
+def get_database_uri():
+    database_url = os.environ.get("DATABASE_URL")
+    
+    if database_url:
+        # Fix postgres:// to postgresql:// for SQLAlchemy 2.0+
+        if database_url.startswith("postgres://"):
+            database_url = database_url.replace("postgres://", "postgresql://", 1)
+        
+        # Test if PostgreSQL is available
+        try:
+            import psycopg2
+            from urllib.parse import urlparse
+            
+            parsed = urlparse(database_url)
+            # Quick connection test
+            conn = psycopg2.connect(
+                host=parsed.hostname,
+                port=parsed.port or 5432,
+                database=parsed.path[1:] if parsed.path else "postgres",
+                user=parsed.username,
+                password=parsed.password,
+                connect_timeout=5
+            )
+            conn.close()
+            logging.info("PostgreSQL connection successful")
+            return database_url
+        except Exception as e:
+            logging.warning(f"PostgreSQL connection failed: {e}")
+            logging.info("Falling back to SQLite for local development")
+    
+    return "sqlite:///crypto_predictor.db"
 
-app.config["SQLALCHEMY_DATABASE_URI"] = database_url or "sqlite:///crypto_predictor.db"
+app.config["SQLALCHEMY_DATABASE_URI"] = get_database_uri()
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
     "pool_recycle": 300,
     "pool_pre_ping": True,

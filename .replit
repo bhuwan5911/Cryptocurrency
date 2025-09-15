@@ -44,3 +44,7 @@ args = "uv add scikit-learn pandas numpy yfinance flask-cors"
 [[ports]]
 localPort = 5000
 externalPort = 80
+
+[[ports]]
+localPort = 37675
+externalPort = 3000
