@@ -1,0 +1,53 @@
+/* This file is for custom CSS that Tailwind CSS cannot easily do.
+  All layout, color, and theme logic is now in index.html
+*/
+
+/* 1. Gradient Text (for Dark Mode) */
+/* We apply this with 'dark:gradient-text' in HTML */
+.gradient-text {
+    background: linear-gradient(90deg, #00ffff, #b833ff, #ff006e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
+
+/* 2. Glow Animation (for icons) */
+@keyframes glow {
+    0%, 100% { box-shadow: 0 0 10px #00ffff, 0 0 5px #00ffff; }
+    50% { box-shadow: 0 0 20px #00ffff, 0 0 10px #00ffff; }
+}
+
+/* We apply this to icon containers */
+.glow-effect {
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+/* 3. Custom Scrollbar (Professional Touch) */
+/* This is for browsers that support it (like Chrome/Safari) */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Light mode track */
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1; /* Light mode thumb */
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Dark mode scrollbar */
+html.dark ::-webkit-scrollbar-track {
+    background: #2d3748; /* gray-800 */
+}
+html.dark ::-webkit-scrollbar-thumb {
+    background: #4a5568; /* gray-600 */
+}
+html.dark ::-webkit-scrollbar-thumb:hover {
+    background: #718096; /* gray-500 */
+}
