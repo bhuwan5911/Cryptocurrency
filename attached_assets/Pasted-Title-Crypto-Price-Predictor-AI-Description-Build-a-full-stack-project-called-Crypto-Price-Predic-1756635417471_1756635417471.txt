@@ -105,3 +105,7 @@ model/ → trained model (model.pkl)
 
 database/ → SQLite DB file (or MongoDB config)
 
+<<<<<<< HEAD
+=======
+Documentation: README.md explaining how to run frontend & backend
+>>>>>>> 1d113ae250faf00f3ece14acc8ea42e42e7f45e1

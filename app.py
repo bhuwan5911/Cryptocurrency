@@ -79,4 +79,7 @@ with app.app_context():
     app.ml_model = CryptoPredictionModel()
     
     logging.info("Application initialized successfully")
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1d113ae250faf00f3ece14acc8ea42e42e7f45e1

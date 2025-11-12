@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /* This file is for custom CSS that Tailwind CSS cannot easily do.
   All layout, color, and theme logic is now in index.html
 */
@@ -19,16 +20,181 @@
 }
 
 /* We apply this to icon containers */
+=======
+/* Modern Crypto Predictor AI Theme */
+
+/* Light theme styles */
+.light-theme {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%) !important;
+    color: #333 !important;
+}
+
+.light-theme .glass-card {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    color: #333 !important;
+}
+
+.light-theme .glass-input {
+    background: rgba(255, 255, 255, 0.8) !important;
+    border: 2px solid rgba(0, 0, 0, 0.2) !important;
+    color: #333 !important;
+}
+
+.light-theme .glass-input::placeholder {
+    color: #666 !important;
+}
+
+.light-theme nav {
+    background: rgba(255, 255, 255, 0.95) !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+.light-theme .gradient-text {
+    background: linear-gradient(45deg, #667eea, #764ba2) !important;
+    background-clip: text !important;
+    -webkit-background-clip: text !important;
+    color: transparent !important;
+}
+
+/* Glass morphism effects with improved visibility */
+.glass-card {
+    @apply backdrop-blur-xl bg-gradient-to-br from-white/20 to-white/5 border border-white/30 rounded-2xl shadow-2xl;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.glass-input {
+    @apply backdrop-blur-lg bg-white/20 border-2 border-white/30 rounded-xl px-4 py-3 text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition-all duration-300;
+    box-shadow: 0 8px 32px 0 rgba(0, 255, 255, 0.1);
+}
+
+.glass-input:focus {
+    @apply bg-white/30 shadow-lg;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3), 0 8px 32px 0 rgba(0, 255, 255, 0.2);
+}
+
+/* Enhanced dropdown styles */
+.glass-input select {
+    @apply bg-transparent text-white;
+}
+
+.glass-input option {
+    @apply bg-gray-800 text-white py-2;
+}
+
+/* Modern buttons */
+.btn-primary {
+    @apply bg-gradient-to-r from-cyan-500 via-blue-600 to-purple-600 hover:from-cyan-600 hover:via-blue-700 hover:to-purple-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg;
+    box-shadow: 0 10px 30px rgba(6, 182, 212, 0.4), 0 0 20px rgba(139, 92, 246, 0.2);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 15px 40px rgba(6, 182, 212, 0.6), 0 0 30px rgba(139, 92, 246, 0.4);
+}
+
+.btn-primary:disabled {
+    @apply opacity-50 cursor-not-allowed transform-none;
+}
+
+/* Enhanced period buttons */
+.chart-period-btn, .prediction-period-btn {
+    @apply px-4 py-2 text-sm font-semibold text-gray-300 hover:text-white transition-all duration-300 rounded-lg hover:bg-gradient-to-r hover:from-cyan-500/20 hover:to-purple-500/20 border border-gray-600/50 hover:border-cyan-400/50;
+}
+
+.chart-period-btn.active, .prediction-period-btn.active {
+    @apply text-white bg-gradient-to-r from-cyan-500 to-purple-600 border-transparent shadow-lg;
+    box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+}
+
+/* Neon glow effects */
+@keyframes glow {
+    from { box-shadow: 0 0 5px rgba(0, 255, 255, 0.2), 0 0 10px rgba(0, 255, 255, 0.2), 0 0 15px rgba(0, 255, 255, 0.2); }
+    to { box-shadow: 0 0 10px rgba(0, 255, 255, 0.4), 0 0 20px rgba(0, 255, 255, 0.4), 0 0 30px rgba(0, 255, 255, 0.4); }
+}
+
+>>>>>>> 1d113ae250faf00f3ece14acc8ea42e42e7f45e1
 .glow-effect {
     animation: glow 2s ease-in-out infinite alternate;
 }
 
+<<<<<<< HEAD
 /* 3. Custom Scrollbar (Professional Touch) */
 /* This is for browsers that support it (like Chrome/Safari) */
+=======
+/* Enhanced animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slide-up {
+    animation: slideUp 0.4s ease-out;
+}
+
+/* Modern card hover effects */
+.glass-card:hover {
+    @apply transform scale-105;
+    box-shadow: 0 35px 60px -12px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+/* Enhanced table styles */
+table tbody tr {
+    @apply border-b border-white/10 hover:bg-gradient-to-r hover:from-cyan-500/5 hover:to-purple-500/5 transition-all duration-300;
+}
+
+table tbody td {
+    @apply py-4 px-3 text-sm;
+}
+
+/* Status badges with glow */
+.status-pending {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-yellow-400/20 to-orange-400/20 text-yellow-300 border border-yellow-400/30;
+    box-shadow: 0 0 10px rgba(255, 193, 7, 0.2);
+}
+
+.status-completed {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-gradient-to-r from-green-400/20 to-emerald-400/20 text-green-300 border border-green-400/30;
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
+}
+
+/* Enhanced crypto colors with glow */
+.text-crypto-bitcoin { 
+    color: #f7931a; 
+    text-shadow: 0 0 10px rgba(247, 147, 26, 0.3);
+}
+.text-crypto-ethereum { 
+    color: #627eea; 
+    text-shadow: 0 0 10px rgba(98, 126, 234, 0.3);
+}
+
+/* Navigation with modern styling */
+nav {
+    @apply backdrop-blur-xl bg-gradient-to-r from-gray-900/90 to-slate-800/90 border-b border-white/20;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+/* Enhanced loading states */
+.loading {
+    @apply opacity-60 pointer-events-none;
+}
+
+/* Modern scrollbar */
+>>>>>>> 1d113ae250faf00f3ece14acc8ea42e42e7f45e1
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
 }
+<<<<<<< HEAD
 ::-webkit-scrollbar-track {
     background: #f1f1f1; /* Light mode track */
     border-radius: 10px;
@@ -50,4 +216,92 @@ html.dark ::-webkit-scrollbar-thumb {
 }
 html.dark ::-webkit-scrollbar-thumb:hover {
     background: #718096; /* gray-500 */
+=======
+
+::-webkit-scrollbar-track {
+    @apply bg-gray-800/50 rounded-lg;
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-gradient-to-b from-cyan-500 to-purple-600 rounded-lg;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    @apply from-cyan-400 to-purple-500;
+}
+
+/* Enhanced mobile responsiveness */
+@media (max-width: 640px) {
+    .glass-card {
+        @apply mx-2 rounded-xl;
+    }
+    
+    .btn-primary {
+        @apply py-3 px-6 text-sm;
+    }
+    
+    table {
+        @apply text-xs;
+    }
+}
+
+/* Chart improvements */
+#priceChart {
+    background: transparent !important;
+    border-radius: 1rem;
+}
+
+/* Success/Error messages with modern styling */
+.message-enter {
+    animation: slideUp 0.4s ease-out;
+}
+
+/* Enhanced prediction result styling */
+#predictionResult {
+    @apply bg-gradient-to-br from-green-500/10 via-blue-500/10 to-purple-500/10 border-2 border-gradient-to-r border-green-400/30 rounded-2xl backdrop-blur-lg;
+    box-shadow: 0 20px 40px rgba(34, 197, 94, 0.1), 0 0 20px rgba(6, 182, 212, 0.1);
+}
+
+#errorMessage {
+    @apply bg-gradient-to-br from-red-500/10 to-pink-500/10 border-2 border-red-400/30 rounded-2xl backdrop-blur-lg;
+    box-shadow: 0 20px 40px rgba(239, 68, 68, 0.1);
+}
+
+/* Enhanced focus states */
+.glass-input:focus,
+.chart-period-btn:focus,
+.prediction-period-btn:focus,
+.btn-primary:focus {
+    @apply outline-none ring-2 ring-cyan-400/50;
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Header with gradient text */
+.gradient-text {
+    @apply bg-gradient-to-r from-cyan-400 via-blue-400 to-purple-400 bg-clip-text text-transparent;
+}
+
+/* Enhanced loading overlay */
+#loadingOverlay .glass-card {
+    @apply bg-gradient-to-br from-gray-800/90 to-gray-900/90;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 30px rgba(6, 182, 212, 0.2);
+}
+
+/* Modern stat cards */
+.stat-card {
+    @apply transform transition-all duration-300 hover:scale-110 hover:rotate-1;
+}
+
+/* Enhanced dropdown arrow */
+.dropdown-arrow {
+    @apply text-cyan-400 transition-colors duration-300;
+>>>>>>> 1d113ae250faf00f3ece14acc8ea42e42e7f45e1
 }
