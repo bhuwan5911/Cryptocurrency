@@ -54,7 +54,12 @@ def get_database_uri():
             logging.warning(f"PostgreSQL connection failed: {e}")
             logging.info("Falling back to SQLite for local development")
     
-    return "sqlite:///crypto_predictor.db"
+    # Updated path for local SQLite to be in the 'instance' folder
+    instance_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'instance')
+    if not os.path.exists(instance_path):
+        os.makedirs(instance_path)
+    
+    return f"sqlite:///{os.path.join(instance_path, 'crypto_predictor.db')}"
 
 app.config["SQLALCHEMY_DATABASE_URI"] = get_database_uri()
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
@@ -79,7 +84,3 @@ with app.app_context():
     app.ml_model = CryptoPredictionModel()
     
     logging.info("Application initialized successfully")
-<<<<<<< HEAD
-
-=======
->>>>>>> 1d113ae250faf00f3ece14acc8ea42e42e7f45e1

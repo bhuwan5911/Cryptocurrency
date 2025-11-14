@@ -107,9 +107,18 @@ def chart_data():
         logging.error(f"Error in chart-data endpoint: {e}")
         return jsonify({'error': 'Failed to retrieve chart data.'}), 500
 
+# --- YEH HAI AAPKA FIX ---
+# Pehle yeh 'index.html' bhej raha tha, ab yeh JSON bhejega.
 @app.errorhandler(404)
 def not_found(error):
-    return render_template('index.html'), 404
+    # API requests (like /api/...) ko JSON error chahiye
+    if request.path.startswith('/api/'):
+        return jsonify({'error': 'Not Found', 'message': 'The requested API endpoint does not exist.'}), 404
+    
+    # Non-API requests (jaise /favicon.ico) ko simple error de sakte hain
+    # Ya seedhe index par redirect kar sakte hain, par 200 code ke saath
+    # Sabse safe hai bas ek simple message dena.
+    return jsonify({'error': 'Not Found', 'message': 'The requested URL does not exist.'}), 404
 
 @app.errorhandler(500)
 def internal_error(error):
