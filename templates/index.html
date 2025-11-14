@@ -25,7 +25,7 @@
                     animation: {
                         'fade-in': 'fadeIn 0.5s ease-in',
                         'slide-up': 'slideUp 0.3s ease-out',
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0.6, 1) infinite',
                         'glow': 'glow 2s ease-in-out infinite alternate',
                     }
                 }
@@ -101,7 +101,7 @@
                     <i data-feather="layers" class="w-6 h-6 text-purple-600 dark:text-purple-400"></i>
                 </div>
                 <h3 class="text-sm font-bold text-gray-600 dark:text-gray-300 mb-1">Cryptocurrencies</h3>
-                <p class="text-2xl font-black text-purple-600 dark:text-purple-400">9</p> <!-- Changed to 9 -->
+                <p class="text-2xl font-black text-purple-600 dark:text-purple-400">8</p> <!-- Changed to 8 -->
                 <p class="text-xs text-purple-600 dark:text-purple-400 mt-1">Supported</p>
             </div>
             
@@ -139,7 +139,7 @@
                     <form id="predictionForm" class="space-y-8">
                         <div>
                             <label class="block text-sm font-bold text-gray-700 dark:text-gray-200 mb-3">
-                                <i data-feather="coins" class="w-4 h-4 inline mr-2 text-cyan-600 dark:text-cyan-400"></i>
+                                <i data-feather="database" class="w-4 h-4 inline mr-2 text-cyan-600 dark:text-cyan-400"></i> <!-- ICON FIX: 'coins' -> 'database' -->
                                 Select Cryptocurrency
                             </label>
                             <div class="relative">
@@ -149,12 +149,11 @@
                                     <option value="ETH">🔵 Ethereum (ETH)</option>
                                     <option value="ADA">🔹 Cardano (ADA)</option>
                                     <option value="SOL">🟣 Solana (SOL)</option>
-                                    <!-- HACKATHON FIX: MATIC ko hata diya -->
                                     <!-- <option value="MATIC">🟣 Polygon (MATIC)</option> -->
                                     <option value="DOT">🔴 Polkadot (DOT)</option>
                                     <option value="AVAX">🔴 Avalanche (AVAX)</option>
                                     <option value="LINK">🔵 Chainlink (LINK)</option>
-                                  <!--  <option value="UNI">🟡 Uniswap (UNI)</option>-->
+                                    <!-- <option value="UNI">🟡 Uniswap (UNI)</option> -->
                                     <option value="LTC">⚪ Litecoin (LTC)</option>
                                 </select>
                                 <div class="absolute inset-y-0 right-0 flex items-center px-4 pointer-events-none">
@@ -180,9 +179,9 @@
                         </div>
                         
                         <button type="submit" id="predictBtn" class="w-full flex items-center justify-center space-x-3 rounded-xl py-4 px-6 font-bold text-white bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-cyan-500/30 transform hover:scale-105">
-                            <i data-feather="brain" class="w-5 h-5"></i>
+                            <i data-feather="cpu" class="w-5 h-5"></i> <!-- ICON FIX: 'brain' -> 'cpu' -->
                             <span class="font-bold">Generate AI Prediction</span>
-                            <i data-feather="sparkles" class="w-4 h-4"></i>
+                            <i data-feather="star" class="w-4 h-4"></i> <!-- ICON FIX: 'sparkles' -> 'star' -->
                         </button>
                     </form>
                     
@@ -281,12 +280,40 @@
                     </div>
                 </div>
                 
+                <!-- 
+                    NAYA CARD (STEP 2.4)
+                    Yeh hai "AI Market Analysis" card jo pehle missing tha.
+                    Ismein `analyzeBtn` aur `analysisOutput` IDs hain.
+                -->
+                <div class="p-8 bg-white/60 dark:bg-black/20 border border-gray-200 dark:border-white/10 backdrop-blur-lg rounded-2xl shadow-lg">
+                    <div class="flex items-center space-x-4 mb-8">
+                        <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center glow-effect">
+                            <i data-feather="message-circle" class="w-7 h-7 text-white"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-blue-600 dark:text-blue-400">AI Analyst Insight</h2>
+                            <p class="text-sm text-gray-600 dark:text-gray-300">Powered by GPT-4o</p>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <button type="button" id="analyzeBtn" class="w-full flex items-center justify-center space-x-3 rounded-xl py-4 px-6 font-bold text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 shadow-lg hover:shadow-blue-500/30 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                            <!-- Loading spinner SVG (app.js se control hoga) -->
+                            <i data-feather="zap" class="w-5 h-5"></i>
+                            <span class="font-bold">Get AI Insight</span>
+                        </button>
+                        <div id="analysisOutput" class="p-4 bg-gray-100/50 dark:bg-white/5 rounded-xl text-gray-700 dark:text-gray-300 min-h-[100px]">
+                            <p class="text-gray-500 dark:text-gray-400">Please generate a prediction first...</p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Predictions History -->
                 <div class="p-8 bg-white/60 dark:bg-black/20 border border-gray-200 dark:border-white/10 backdrop-blur-lg rounded-2xl shadow-lg">
                     <div class="flex items-center space-x-4 mb-8">
                         <!-- Icon 8 (ADDED GLOW) -->
                         <div class="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center glow-effect">
-                            <i data-feather="history" class="w-7 h-7 text-white"></i>
+                            <i data-feather="clock" class="w-7 h-7 text-white"></i> <!-- ICON FIX: 'history' -> 'clock' -->
                         </div>
                         <div>
                             <!-- 
@@ -302,7 +329,7 @@
                             <thead>
                                 <tr class="border-b border-gray-200 dark:border-white/20 bg-gray-100/50 dark:bg-gradient-to-r dark:from-cyan-500/5 dark:to-purple-500/5">
                                     <th class="text-left py-4 px-4 text-gray-700 dark:text-gray-200 font-bold">
-                                        <i data-feather="coins" class="w-4 h-4 inline mr-2 text-cyan-600 dark:text-cyan-400"></i>
+                                        <i data-feather="database" class="w-4 h-4 inline mr-2 text-cyan-600 dark:text-cyan-400"></i> <!-- ICON FIX: 'coins' -> 'database' -->
                                         Crypto
                                     </th>
                                     <th class="text-left py-4 px-4 text-gray-700 dark:text-gray-200 font-bold">
@@ -352,7 +379,7 @@
             <div class="relative mb-6">
                 <div class="animate-spin w-16 h-16 border-4 border-cyan-500 border-t-transparent rounded-full mx-auto"></div>
                 <div class="absolute inset-0 flex items-center justify-center">
-                    <i data-feather="cpu" class="w-6 h-6 text-cyan-400 animate-pulse"></i>
+                    <i data-feather="cpu" class="w-6 h-6 text-cyan-400 animate-pulse"></i> <!-- ICON FIX: 'cpu' -->
                 </div>
             </div>
             <h3 class="text-2xl font-bold gradient-text mb-3">AI Processing</h3>

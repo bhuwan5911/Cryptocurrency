@@ -1,9 +1,89 @@
 from flask import render_template, request, jsonify
 from app import app, db
-from models import Prediction, PortfolioHolding
+from models import Prediction, PortfolioHolding # PortfolioHolding ko import kar rahe hain
 from datetime import datetime
 import logging
 import yfinance as yf
+
+# ------ STEP 2.3 (NAYA CODE) START ------
+from bytez import Bytez # Nayi 'bytez' library ko import kiya
+import os # OS ko import kiya (agar pehle se nahi hai)
+
+# Aapki 'bytez' API key
+# NOTE: Ek real project mein, isse Environment Variable mein rakhte hain, 
+# lekin hackathon ke liye yeh theek hai.
+bytez_key = "63ce62411ba8cdbcb13b0674b44c480e" 
+sdk = Bytez(bytez_key)
+# Hum GPT-4o-mini use karenge (yeh fast aur sasta hai)
+ai_analyst_model = sdk.model("openai/gpt-4o-mini") 
+
+@app.route('/api/analyze', methods=['POST'])
+def analyze_prediction():
+    """
+    YEH POORA NAYA "WOW" FACTOR ROUTE HAI
+    Yeh prediction data leta hai aur AI Analyst se uska matlab poochta hai.
+    """
+    try:
+        data = request.get_json()
+        crypto = data.get('crypto')
+        current_price = data.get('current_price')
+        predicted_price = data.get('predicted_price')
+
+        if not all([crypto, current_price, predicted_price]):
+            return jsonify({'error': 'Missing data for analysis'}), 400
+        
+        # --- YEH HAI PROMPT ENGINEERING ---
+        # Hum AI ko "role" (kirdaar) de rahe hain
+        prompt_to_ai = f"""
+        You are a neutral crypto market analyst. 
+        A user's LSTM AI model predicts that {crypto} will go from ${current_price:,.2f} to ${predicted_price:,.2f} tomorrow.
+
+        Write a very short, 2-3 sentence analysis for a beginner. 
+        - Is this a "bullish" (positive) or "bearish" (negative) signal?
+        - What does this suggest about the short-term market sentiment?
+
+        IMPORTANT: Do NOT give financial advice. Do NOT tell the user to 'buy', 'sell', or 'hold'. 
+        Just analyze the model's prediction in simple terms.
+        """
+        
+        # AI Analyst (Bytez) ko call karo
+        messages = [
+            {"role": "system", "content": "You are a helpful crypto analyst who speaks in simple terms."},
+            {"role": "user", "content": prompt_to_ai}
+        ]
+        
+        # ------ CRASH FIX YAHAN HAI ------
+        # Purana code (Problem waala):
+        # output, error = ai_analyst_model.run(messages)
+        
+        # Naya code (Safe waala):
+        # Hum poora response ek variable mein store karenge
+        run_response = ai_analyst_model.run(messages)
+        
+        # Ab humein pata hai ki pehli cheez 'output' hai aur doosri 'error'
+        output = run_response[0]
+        error = run_response[1]
+        # ------ FIX KHATAM ------
+        
+        if error:
+            logging.error(f"Bytez AI analysis error: {error}")
+            raise Exception(error)
+        
+        # AI ka jawaab frontend ko bhejo
+        analysis_text = output['content']
+        logging.info(f"AI Analysis generated for {crypto}")
+        
+        return jsonify({
+            'success': True,
+            'analysis': analysis_text
+        })
+        
+    except Exception as e:
+        logging.error(f"Error in /api/analyze endpoint: {e}", exc_info=True)
+        return jsonify({'error': 'Failed to generate AI analysis.'}), 500
+
+# ------ STEP 2.3 (NAYA CODE) END ------
+
 
 @app.route('/')
 def index():
@@ -17,11 +97,12 @@ def predict():
         data = request.get_json()
         crypto = data.get('crypto', '').upper()
         
-        valid_cryptos = ['BTC', 'ETH', 'ADA', 'SOL', 'MATIC', 'DOT', 'AVAX', 'LINK', 'UNI', 'LTC']
+        # HACKATHON FIX: List se MATIC aur UNI hata diye
+        valid_cryptos = ['BTC', 'ETH', 'ADA', 'SOL', 'DOT', 'AVAX', 'LINK', 'LTC']
         if crypto not in valid_cryptos:
-            return jsonify({'error': f'Invalid cryptocurrency. Please select from: {", ".join(valid_cryptos)}.'}), 400
+            return jsonify({'error': f'Invalid cryptocurrency.'}), 400
         
-        # Generate prediction using ML model
+        # Generate prediction using ML model (Naya LSTM model)
         prediction_result = app.ml_model.predict_price(crypto)
         
         if not prediction_result:
@@ -31,7 +112,8 @@ def predict():
         prediction = Prediction(
             crypto=crypto,
             predicted_price=prediction_result['predicted_price'],
-            prediction_date=prediction_result['prediction_date']
+            actual_price=None, # Actual price abhi 'None' hai
+            prediction_date=datetime.strptime(prediction_result['prediction_date'], '%Y-%m-%d').date()
         )
         
         db.session.add(prediction)
@@ -52,7 +134,7 @@ def predict():
         return jsonify(response_data)
     
     except Exception as e:
-        logging.error(f"Error in predict endpoint: {e}")
+        logging.error(f"Error in predict endpoint: {e}", exc_info=True)
         return jsonify({'error': 'An error occurred while generating the prediction.'}), 500
 
 @app.route('/api/history')
@@ -87,7 +169,8 @@ def chart_data():
         crypto = request.args.get('crypto', 'BTC').upper()
         days = request.args.get('days', 30, type=int)
         
-        valid_cryptos = ['BTC', 'ETH', 'ADA', 'SOL', 'MATIC', 'DOT', 'AVAX', 'LINK', 'UNI', 'LTC']
+        # HACKATHON FIX: List se MATIC aur UNI hata diye
+        valid_cryptos = ['BTC', 'ETH', 'ADA', 'SOL', 'DOT', 'AVAX', 'LINK', 'LTC']
         if crypto not in valid_cryptos:
             return jsonify({'error': 'Invalid cryptocurrency'}), 400
         
@@ -107,25 +190,17 @@ def chart_data():
         logging.error(f"Error in chart-data endpoint: {e}")
         return jsonify({'error': 'Failed to retrieve chart data.'}), 500
 
-# --- YEH HAI AAPKA FIX ---
-# Pehle yeh 'index.html' bhej raha tha, ab yeh JSON bhejega.
 @app.errorhandler(404)
 def not_found(error):
-    # API requests (like /api/...) ko JSON error chahiye
-    if request.path.startswith('/api/'):
-        return jsonify({'error': 'Not Found', 'message': 'The requested API endpoint does not exist.'}), 404
-    
-    # Non-API requests (jaise /favicon.ico) ko simple error de sakte hain
-    # Ya seedhe index par redirect kar sakte hain, par 200 code ke saath
-    # Sabse safe hai bas ek simple message dena.
-    return jsonify({'error': 'Not Found', 'message': 'The requested URL does not exist.'}), 404
+    # Yeh duplication error ko rokta hai
+    return jsonify({'error': 'Not Found'}), 404
 
 @app.errorhandler(500)
 def internal_error(error):
     db.session.rollback()
     return jsonify({'error': 'Internal server error occurred.'}), 500
 
-# Portfolio Management Endpoints
+# Portfolio Management Endpoints (Yeh code change nahi hua hai)
 @app.route('/api/portfolio', methods=['GET'])
 def get_portfolio():
     """Get all portfolio holdings with current values"""
@@ -136,14 +211,16 @@ def get_portfolio():
             return jsonify({
                 'success': True,
                 'holdings': [],
-                'total_value': 0,
-                'total_invested': 0,
-                'total_pnl': 0,
-                'total_pnl_percent': 0
+                'total_value': 0, 'total_invested': 0,
+                'total_pnl': 0, 'total_pnl_percent': 0
             })
         
         # Get current prices for all unique cryptos in portfolio
         cryptos = list(set([h.crypto for h in holdings]))
+        # HACKATHON FIX: Filter out any 'bad' cryptos just in case
+        valid_cryptos = ['BTC', 'ETH', 'ADA', 'SOL', 'DOT', 'AVAX', 'LINK', 'LTC']
+        cryptos = [c for c in cryptos if c in valid_cryptos]
+        
         current_prices = {}
         
         for crypto in cryptos:
@@ -162,8 +239,8 @@ def get_portfolio():
         
         for holding in holdings:
             current_price = current_prices.get(holding.crypto, 0)
-            current_value = holding.amount * current_price
-            invested_value = holding.amount * holding.purchase_price
+            current_value = (holding.amount or 0) * current_price
+            invested_value = (holding.amount or 0) * (holding.purchase_price or 0)
             pnl = current_value - invested_value
             pnl_percent = (pnl / invested_value * 100) if invested_value > 0 else 0
             
@@ -193,7 +270,7 @@ def get_portfolio():
         })
         
     except Exception as e:
-        logging.error(f"Error getting portfolio: {e}")
+        logging.error(f"Error getting portfolio: {e}", exc_info=True)
         return jsonify({'error': 'Failed to load portfolio'}), 500
 
 @app.route('/api/portfolio', methods=['POST'])
@@ -206,9 +283,9 @@ def add_holding():
         purchase_price = float(data.get('purchase_price', 0))
         notes = data.get('notes', '')
         
-        valid_cryptos = ['BTC', 'ETH', 'ADA', 'SOL', 'MATIC', 'DOT', 'AVAX', 'LINK', 'UNI', 'LTC']
+        valid_cryptos = ['BTC', 'ETH', 'ADA', 'SOL', 'DOT', 'AVAX', 'LINK', 'LTC']
         if crypto not in valid_cryptos:
-            return jsonify({'error': f'Invalid cryptocurrency. Please select from: {", ".join(valid_cryptos)}.'}), 400
+            return jsonify({'error': 'Invalid cryptocurrency.'}), 400
         
         if amount <= 0 or purchase_price <= 0:
             return jsonify({'error': 'Amount and purchase price must be greater than 0.'}), 400
@@ -234,7 +311,7 @@ def add_holding():
     except ValueError:
         return jsonify({'error': 'Invalid amount or price format.'}), 400
     except Exception as e:
-        logging.error(f"Error adding holding: {e}")
+        logging.error(f"Error adding holding: {e}", exc_info=True)
         return jsonify({'error': 'Failed to add holding to portfolio'}), 500
 
 @app.route('/api/portfolio/<int:holding_id>', methods=['DELETE'])
@@ -254,5 +331,5 @@ def delete_holding(holding_id):
         })
         
     except Exception as e:
-        logging.error(f"Error deleting holding: {e}")
+        logging.error(f"Error deleting holding: {e}", exc_info=True)
         return jsonify({'error': 'Failed to remove holding from portfolio'}), 500
