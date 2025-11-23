@@ -1,0 +1,9 @@
+flask
+flask-sqlalchemy
+flask-cors
+numpy
+pandas
+yfinance
+tensorflow-cpu
+bytez
+gunicorn
