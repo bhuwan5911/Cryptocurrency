@@ -15,4 +15,8 @@ dependencies = [
     "pandas>=2.3.2",
     "numpy>=2.3.2",
     "sqlalchemy>=2.0.43",
+    "tensorflow>=2.13.0",
+    "ta>=0.11.1",
+    "pytest>=7.4.0",
+    "bytez @ git+https://github.com/RayhanADev/bytez.git"
 ]

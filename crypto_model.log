@@ -1,0 +1,88 @@
+2025-11-22 11:21:28,170 - INFO - Starting ADVANCED CNN-LSTM model training for BTC...
+2025-11-22 11:21:29,191 - ERROR - Fatal error: Data must be 1-dimensional, got ndarray of shape (1826, 1) instead
+2025-11-22 11:21:29,191 - ERROR - Traceback (most recent call last):
+  File "c:\Users\hp\OneDrive\Desktop\Cryptocurrency\ml_model.py", line 447, in <module>
+    model = CryptoPredictionModel()
+            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\hp\OneDrive\Desktop\Cryptocurrency\ml_model.py", line 54, in __init__
+    self.load_or_train_models()
+  File "c:\Users\hp\OneDrive\Desktop\Cryptocurrency\ml_model.py", line 340, in load_or_train_models
+    self.train_model(symbol)
+  File "c:\Users\hp\OneDrive\Desktop\Cryptocurrency\ml_model.py", line 241, in train_model
+    data_with_features = self.engineer_features(data)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\hp\OneDrive\Desktop\Cryptocurrency\ml_model.py", line 99, in engineer_features
+    df['rsi'] = ta.momentum.rsi(df['Close'], window=14)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\ta\momentum.py", line 787, in rsi
+    return RSIIndicator(close=close, window=window, fillna=fillna).rsi()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\ta\momentum.py", line 34, in __init__
+    self._run()
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\ta\momentum.py", line 48, in _run
+    self._rsi = pd.Series(
+                ^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\series.py", line 584, in __init__
+    data = sanitize_array(data, index, dtype, copy)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\construction.py", line 656, in sanitize_array
+    subarr = _sanitize_ndim(subarr, data, dtype, index, allow_2d=allow_2d)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\pandas\core\construction.py", line 715, in _sanitize_ndim
+    raise ValueError(
+ValueError: Data must be 1-dimensional, got ndarray of shape (1826, 1) instead
+
+2025-11-22 11:22:54,243 - INFO - Starting ADVANCED CNN-LSTM model training for BTC...
+2025-11-22 11:22:55,354 - ERROR - Fatal error: A `Concatenate` layer requires inputs with matching shapes except for the concatenation axis. Received: input_shape=[(None, 22, 128), (None, 90, 128)]
+2025-11-22 11:22:55,354 - ERROR - Traceback (most recent call last):
+  File "c:\Users\hp\OneDrive\Desktop\Cryptocurrency\ml_model.py", line 496, in <module>
+    model = CryptoPredictionModel()
+            ^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\hp\OneDrive\Desktop\Cryptocurrency\ml_model.py", line 54, in __init__
+    self.load_or_train_models()
+  File "c:\Users\hp\OneDrive\Desktop\Cryptocurrency\ml_model.py", line 389, in load_or_train_models
+    self.train_model(symbol)
+  File "c:\Users\hp\OneDrive\Desktop\Cryptocurrency\ml_model.py", line 305, in train_model
+    model = self._build_advanced_model(n_features)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "c:\Users\hp\OneDrive\Desktop\Cryptocurrency\ml_model.py", line 227, in _build_advanced_model
+    concat = Concatenate()([conv2, attention])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\keras\src\utils\traceback_utils.py", line 122, in error_handler
+    raise e.with_traceback(filtered_tb) from None
+  File "C:\Users\hp\AppData\Local\Programs\Python\Python311\Lib\site-packages\keras\src\layers\merging\concatenate.py", line 99, in build
+    raise ValueError(err_msg)
+ValueError: A `Concatenate` layer requires inputs with matching shapes except for the concatenation axis. Received: input_shape=[(None, 22, 128), (None, 90, 128)]
+
+2025-11-22 11:24:33,594 - INFO - Starting ADVANCED CNN-LSTM model training for BTC...
+2025-11-22 11:24:34,771 - INFO - Training advanced model for BTC...
+2025-11-22 11:24:34,771 - INFO - Training samples: 1687, Features: 24
+2025-11-22 11:41:24,026 - INFO - Training complete for BTC. Best val_loss: 0.040177
+2025-11-22 11:41:24,026 - INFO - Starting ADVANCED CNN-LSTM model training for ETH...
+2025-11-22 11:41:25,721 - INFO - Training advanced model for ETH...
+2025-11-22 11:41:25,721 - INFO - Training samples: 1687, Features: 24
+2025-11-22 11:56:38,704 - INFO - Training complete for ETH. Best val_loss: 0.012463
+2025-11-22 11:56:38,704 - INFO - Starting ADVANCED CNN-LSTM model training for ADA...
+2025-11-22 11:56:39,301 - INFO - Training advanced model for ADA...
+2025-11-22 11:56:39,301 - INFO - Training samples: 1687, Features: 24
+2025-11-22 12:17:24,961 - INFO - Training complete for ADA. Best val_loss: 0.016041
+2025-11-22 12:17:24,961 - INFO - Starting ADVANCED CNN-LSTM model training for SOL...
+2025-11-22 12:17:26,631 - INFO - Training advanced model for SOL...
+2025-11-22 12:17:26,631 - INFO - Training samples: 1688, Features: 24
+2025-11-22 12:34:04,975 - INFO - Training complete for SOL. Best val_loss: 0.007578
+2025-11-22 12:34:04,975 - INFO - Starting ADVANCED CNN-LSTM model training for DOT...
+2025-11-22 12:34:05,704 - INFO - Training advanced model for DOT...
+2025-11-22 12:34:05,704 - INFO - Training samples: 1688, Features: 24
+2025-11-22 12:52:17,410 - INFO - Training complete for DOT. Best val_loss: 0.020964
+2025-11-22 12:52:17,410 - INFO - Starting ADVANCED CNN-LSTM model training for AVAX...
+2025-11-22 12:52:18,035 - INFO - Training advanced model for AVAX...
+2025-11-22 12:52:18,035 - INFO - Training samples: 1688, Features: 24
+2025-11-22 13:09:40,705 - INFO - Training complete for AVAX. Best val_loss: 0.016117
+2025-11-22 13:09:40,721 - INFO - Starting ADVANCED CNN-LSTM model training for LINK...
+2025-11-22 13:09:41,632 - INFO - Training advanced model for LINK...
+2025-11-22 13:09:41,632 - INFO - Training samples: 1688, Features: 24
+2025-11-22 13:35:14,185 - INFO - Training complete for LINK. Best val_loss: 0.010706
+2025-11-22 13:35:14,201 - INFO - Starting ADVANCED CNN-LSTM model training for LTC...
+2025-11-22 13:35:14,769 - INFO - Training advanced model for LTC...
+2025-11-22 13:35:14,769 - INFO - Training samples: 1688, Features: 24
+2025-11-22 13:57:21,984 - INFO - Training complete for LTC. Best val_loss: 0.022656

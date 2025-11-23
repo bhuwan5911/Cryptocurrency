@@ -24,7 +24,20 @@ class CryptoPredictorApp {
         this.setupEventListeners();
         this.applyDarkMode(); // Theme ko chart load hone se *pehle* apply karo
         this.loadHistory();
-        this.loadChart(30); // Default 30 din ka chart load karo
+
+        // Set default active period button to 7D (period=7)
+        const defaultPeriod = 7;
+        document.querySelectorAll('.chart-period-btn').forEach(btn => {
+            if(parseInt(btn.dataset.period) === defaultPeriod) {
+                btn.classList.add('active', 'bg-cyan-600', 'text-white', 'dark:bg-cyan-500', 'shadow-lg');
+                btn.classList.remove('bg-gray-100/50', 'hover:bg-gray-200/70', 'dark:bg-white/5', 'dark:hover:bg-white/10', 'text-gray-700', 'dark:text-gray-300');
+            } else {
+                btn.classList.remove('active', 'bg-cyan-600', 'text-white', 'dark:bg-cyan-500', 'shadow-lg');
+                btn.classList.add('bg-gray-100/50', 'hover:bg-gray-200/70', 'dark:bg-white/5', 'dark:hover:bg-white/10', 'text-gray-700', 'dark:text-gray-300');
+            }
+        });
+
+        this.loadChart(defaultPeriod); // Default 7 din ka chart load karo
         this.loadPortfolio();
         this.updateStats();
         
