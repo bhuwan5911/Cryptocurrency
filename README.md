@@ -1,153 +1,152 @@
-🚀 Crypto Price Predictor AI: Hybrid Intelligence Dashboard
+-----
 
-A comprehensive full-stack web application that combines Deep Learning (LSTM) for price forecasting with Generative AI (GPT-4o) for market analysis. It bridges the gap between raw data and actionable financial insights.
+# 🚀 Crypto Price Predictor AI: Hybrid Intelligence Dashboard
 
-🧠 The Core Innovation: Hybrid AI System
+### Bridging the gap between Raw Data and Actionable Financial Insights.
 
-This project utilizes a dual-AI architecture:
+-----
 
-The Quant (Predictive AI): A custom-built Stacked LSTM (Long Short-Term Memory) Neural Network trained on 3 years of historical data to predict the next day's closing price based on 60-day temporal patterns.
+## 🧠 The Core Innovation: Hybrid AI System
 
-The Analyst (Generative AI): Integration with GPT-4o (via Bytez) to interpret the numerical prediction and generate a human-readable, context-aware market analysis.
+This project utilizes a dual-AI architecture to deliver superior results:
 
-✨ Key Features
+### 1\. The Quant (Predictive AI) 📈
 
-🔮 Advanced AI Prediction Engine
+A custom-built **Stacked LSTM (Long Short-Term Memory)** Neural Network.
 
-Model Architecture: 4-Layer Stacked LSTM with Dropout Regularization to prevent overfitting.
+  * **Training:** Trained on **3 years** of historical data.
+  * **Logic:** Predicts the **next day's closing price** based on complex 60-day temporal patterns.
 
-Data Pipeline: Real-time data fetching via Yahoo Finance (yfinance) with a 60-day lookback window.
+### 2\. The Analyst (Generative AI) 🤖
 
-Supported Assets: Real-time predictions for 8 major cryptocurrencies: BTC, ETH, ADA, SOL, DOT, AVAX, LINK, LTC.
+Integration with **GPT-4o** (via Bytez).
 
-Smart Pre-processing: Automated MinMax scaling and 3D data reshaping for neural network ingestion.
+  * **Function:** Interprets the numerical prediction.
+  * **Output:** Generates a **human-readable, context-aware market analysis** (e.g., "Bullish trend detected").
 
-🤖 AI Market Analyst
+-----
 
-Automated Insights: Converts complex price predictions into simple, beginner-friendly market summaries.
+## ✨ Key Features
 
-Sentiment Analysis: Automatically identifies "Bullish" or "Bearish" trends based on the model's forecast.
+### 🔮 Advanced AI Prediction Engine
 
-📊 Interactive Dashboard
+  * **Model Architecture:** 4-Layer Stacked LSTM with Dropout Regularization.
+  * **Data Pipeline:** Real-time data fetching via Yahoo Finance (`yfinance`).
+  * **Supported Assets:** Real-time predictions for **8 Major Cryptocurrencies**:
+      * `BTC`, `ETH`, `ADA`, `SOL`, `DOT`, `AVAX`, `LINK`, `LTC`
 
-Live Charts: Dynamic Chart.js visualizations showing historical price action (7D, 30D, 90D).
+### 📊 Interactive Dashboard
 
-Glassmorphism UI: A modern, aesthetically pleasing interface built with Tailwind CSS.
+  * **Live Charts:** Dynamic `Chart.js` visualizations (7D, 30D, 90D views).
+  * **Glassmorphism UI:** Modern interface built with **Tailwind CSS**.
+  * **Theme Aware:** Fully functional **Dark Mode 🌙** and **Light Mode ☀️**.
 
-Theme Aware: Fully functional Dark Mode and Light Mode with high-contrast visibility.
+### 💼 Portfolio Tracker
 
-💼 Portfolio Tracker
+  * **Real-time P\&L:** Track personal crypto holdings with live profit/loss updates.
+  * **Persistent Storage:** Uses **SQLite** to safely store user portfolios.
 
-Real-time P&L: Track personal crypto holdings with live profit/loss calculations.
+-----
 
-Persistent Storage: Uses SQLite (scalable to PostgreSQL) to save user portfolios and prediction history.
-
-🏗️ Technical Architecture
+## 🏗️ Technical Architecture
 
 The application follows a robust 3-tier architecture:
 
-Frontend: HTML5, Tailwind CSS, Vanilla JS (Handles UI logic and async API calls).
+1.  **Frontend:** HTML5, Tailwind CSS, Vanilla JS.
+2.  **Backend:** Flask (Python) serving RESTful APIs.
+3.  **AI Layer:** TensorFlow (Inference) + OpenAI (Analysis).
 
-Backend: Flask (Python) serving RESTful APIs.
+<!-- end list -->
 
-AI Layer:
-
-Inference Engine: TensorFlow/Keras (Loads pre-trained .keras models).
-
-Analysis Engine: Bytez SDK (Connects to OpenAI GPT-4o).
-
+```
 crypto-price-predictor-ai/
 │
-├── app.py                  # Application entry point & Config
-├── ml_model.py             # THE BRAIN: LSTM Architecture, Training, & Prediction Logic
-├── routes.py               # API Endpoints (Predict, Analyze, History)
-├── models.py               # Database Schema
+├── app.py                  # Application Entry Point
+├── ml_model.py             # THE BRAIN: LSTM Architecture
+├── routes.py               # THE WAITER: API Endpoints
 │
-├── models/                 # Pre-trained LSTM Models (.keras files)
-├── scalers/                # Saved Data Scalers (.pkl files)
+├── models/                 # Pre-trained LSTM Models (.keras)
+├── scalers/                # Saved Data Scalers (.pkl)
 │
-├── templates/
-│   └── index.html          # Main Dashboard
-└── static/
-    └── js/
-        └── app.js          # Frontend Logic (API integration)
+├── templates/              # Frontend UI
+└── static/                 # CSS & JavaScript
+```
 
+-----
 
-🚀 Quick Start
+## 🚀 Quick Start Guide
 
-Prerequisites
+### 1\. Clone the Repository
 
-Python 3.10+
-
-Virtual Environment (Recommended)
-
-Installation
-
-Clone the repository
-
+```bash
 git clone <your-repo-url>
 cd crypto-price-predictor-ai
+```
 
+### 2\. Set up Virtual Environment
 
-Set up Virtual Environment
-
+```bash
 python -m venv .venv
 # Windows
 .\.venv\Scripts\activate
 # Mac/Linux
 source .venv/bin/activate
+```
 
+### 3\. Install Dependencies
 
-Install Dependencies
-
+```bash
 pip install flask flask-sqlalchemy flask-cors numpy pandas yfinance tensorflow bytez
+```
 
+### 4\. Initialize Database
 
-Initialize Database
-
+```bash
 python
 >>> from app import app, db
 >>> with app.app_context(): db.create_all()
 >>> exit()
+```
 
+### 5\. Train Models (First Run Only)
 
-Train/Load Models (First run only)
-
+```bash
 # This trains the LSTM models and saves them to /models
 python train_model.py
+```
 
+### 6\. Run the App
 
-Run the Application
-
+```bash
 python -m flask run --host=0.0.0.0 --port=5000
+```
 
+-----
 
-🤖 Model Technical Details
+## 🤖 Model Technical Details
 
-Algorithm: Long Short-Term Memory (LSTM) Recurrent Neural Network.
+| Parameter | Value |
+| :--- | :--- |
+| **Algorithm** | Long Short-Term Memory (LSTM) |
+| **Training Data** | 3 Years (Daily Closing Prices) |
+| **Lookback Window** | 60 Days |
+| **Loss Function** | Mean Squared Error (MSE) |
+| **Optimizer** | Adam |
+| **Epochs** | 25 |
 
-Training Data: 3 Years of Daily Closing Prices (OHLCV).
+-----
 
-Input Shape: (Samples, 60, 1) - The model looks at a sequence of the past 60 days.
+## 🔮 Roadmap & Future Enhancements
 
-Loss Function: Mean Squared Error (MSE) - Optimized to penalize large prediction errors.
+  * [ ] **Automated Retraining Pipeline:** Nightly Cron Job to retrain models.
+  * [ ] **Multi-Feature Input:** Add Volume, Open, High, Low data.
+  * [ ] **User Accounts:** Secure login/signup.
+  * [ ] **Sentiment Analysis:** Integrate News API.
 
-Optimizer: Adam.
+-----
 
-Training Epochs: 25 (with Early Stopping logic capabilities).
+### 📄 License
 
-🔮 Roadmap & Future Enhancements
+This project is built for **educational and competition purposes**.
 
-[ ] Automated Retraining Pipeline: Implement a Cron Job to retrain LSTM models nightly with the latest data to prevent model staleness.
-
-[ ] Multi-Feature Input: Expand LSTM to use Volume, Open, High, and Low prices (multivariate) for higher accuracy.
-
-[ ] User Accounts: Implement secure login/signup for personalized portfolios.
-
-[ ] Sentiment Analysis: Integrate news API to feed social sentiment into the LSTM model.
-
-📄 License
-
-This project is built for educational and competition purposes.
-
-Built with ❤️ using Flask, TensorFlow, and OpenAI
+**Built with ❤️ using Flask, TensorFlow, and OpenAI**
